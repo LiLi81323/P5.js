@@ -11,7 +11,7 @@ let highTreble = 0;
 let leafColorFactor = 0;
 
 function preload() {
-  song = loadSound("term2_Final_XiaoanHuang_2025_03_20_16_18_08/assets/ForestNoise2.MP3");
+  song = loadSound("ForestNoise2.MP3");
 }
 
 function setup() {
