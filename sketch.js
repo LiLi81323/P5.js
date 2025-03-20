@@ -2,8 +2,8 @@ let song;
 let fft;
 let branchAngles = [];
 let numBranches = 10;
-let playButton;
-let audioStarted = false;
+let audioStarted = false; // 记录音频是否已开始
+let playButton; // 播放按钮
 
 let smoothedBass = 0;
 let smoothedMid = 0;
@@ -18,9 +18,9 @@ function preload() {
 
 function setup() {
   createCanvas(1024, 798);
-  
+
   // 创建播放按钮
-  playButton = createButton("🎵 点击播放音乐");
+  playButton = createButton("▶️ 点击播放音乐");
   playButton.position(width / 2 - 50, height / 2);
   playButton.mousePressed(startAudio);
 
@@ -33,24 +33,23 @@ function setup() {
 }
 
 function startAudio() {
-  userStartAudio(); // 解锁音频播放
-  if (song.isLoaded()) {
-    song.play(); // 直接播放
-    console.log("🎶 开始播放音乐 🎶");
-  } else {
-    console.log("⚠️ 音频未正确加载");
-  }
-  audioStarted = true;
-  playButton.hide(); // 隐藏按钮
+  userStartAudio().then(() => {
+    if (song.isLoaded()) {
+      song.loop();
+      console.log("🎶 开始播放音乐 🎶");
+    } else {
+      console.log("⚠️ 音频未正确加载");
+    }
+    audioStarted = true;
+    playButton.hide(); // 隐藏播放按钮
+  }).catch(e => {
+    console.log("⚠️ AudioContext 未能恢复:", e);
+  });
 }
 
 function draw() {
   background(255);
   translate(width / 2, height);
-
-  if (!audioStarted) {
-    return; // 音乐未播放时，不绘制
-  }
 
   let spectrum = fft.analyze();
 
