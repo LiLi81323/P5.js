@@ -10,34 +10,13 @@ let smoothedTrunkThickness = 15;
 let highTreble = 0;
 let leafColorFactor = 0;
 
-let playButton; // 按钮变量
-let audioStarted = false; // 追踪音频是否已开始
-
 function preload() {
-  // 确保这个链接可以访问到音频
-  song = loadSound("https://lili81323.github.io/P5.js/ForestNoise2.MP3", soundLoaded, loadError);
-}
-
-function soundLoaded() {
-  console.log("音频文件已加载 🎵");
-}
-
-function loadError(err) {
-  console.log("⚠️ 音频加载失败:", err);
+  song = loadSound("https://lili81323.github.io/P5.js/ForestNoise2.MP3");
 }
 
 function setup() {
   createCanvas(1024, 798);
-
-  // 创建按钮
-  playButton = createButton("🎵 点击播放声音 🎵");
-  playButton.position(width / 2 - 50, height / 2);
-  playButton.style("font-size", "16px");
-  playButton.style("padding", "10px");
-  playButton.style("background-color", "#4CAF50");
-  playButton.style("color", "white");
-  playButton.mousePressed(startAudio); // 绑定点击事件
-
+  song.loop();
   fft = new p5.FFT(0.8, 64);
   fft.smooth(0.85);
 
@@ -49,14 +28,6 @@ function setup() {
 function draw() {
   background(255);
   translate(width / 2, height);
-
-  if (!audioStarted) {
-    textSize(20);
-    fill(0);
-    textAlign(CENTER, CENTER);
-    text("点击按钮开始声音", width / 2, height / 3);
-    return; // 还没开始播放音频时，不执行视觉化
-  }
 
   let spectrum = fft.analyze();
 
@@ -91,7 +62,6 @@ function draw() {
   recursiveBranch(180, smoothedTrunkThickness, branchAngle, leafOpacity, 0);
 }
 
-// 递归画分支
 function recursiveBranch(len, weight, angle, leafAlpha, depth) {
   if (len < 10) return;
 
@@ -135,18 +105,5 @@ function recursiveBranch(len, weight, angle, leafAlpha, depth) {
       ellipse(x, y, leafSize, leafSize);
     }
   }
-}
-
-// 用户点击按钮后开始音频
-function startAudio() {
-  userStartAudio(); // 解锁音频播放
-  if (song.isLoaded() && !song.isPlaying()) {
-    song.loop();
-    console.log("🎶 开始播放音乐 🎶");
-  } else {
-    console.log("⚠️ 音频未正确加载");
-  }
-  audioStarted = true;
-  playButton.hide(); // 隐藏按钮
 }
 
