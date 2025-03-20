@@ -12,7 +12,6 @@ function preload() {
 function setup() {
   createCanvas(1024, 798);
 
-
   playButton = createButton("Click to Play");
   playButton.position(width / 2 - 50, height / 2);
   playButton.mousePressed(startAudio);
@@ -31,7 +30,7 @@ function startAudio() {
       song.loop();
     }
     audioStarted = true;
-    playButton.hide(); 
+    playButton.hide();
   });
 }
 
