@@ -10,19 +10,32 @@ let smoothedTrunkThickness = 15;
 let highTreble = 0;
 let leafColorFactor = 0;
 
-let playButton; // 添加按钮变量
+let playButton; // 按钮变量
 let audioStarted = false; // 追踪音频是否已开始
 
 function preload() {
-  song = loadSound("https://lili81323.github.io/P5.js/ForestNoise2.MP3");
+  // 确保这个链接可以访问到音频
+  song = loadSound("https://lili81323.github.io/P5.js/ForestNoise2.MP3", soundLoaded, loadError);
+}
+
+function soundLoaded() {
+  console.log("音频文件已加载 🎵");
+}
+
+function loadError(err) {
+  console.log("⚠️ 音频加载失败:", err);
 }
 
 function setup() {
   createCanvas(1024, 798);
 
   // 创建按钮
-  playButton = createButton("点击播放声音");
+  playButton = createButton("🎵 点击播放声音 🎵");
   playButton.position(width / 2 - 50, height / 2);
+  playButton.style("font-size", "16px");
+  playButton.style("padding", "10px");
+  playButton.style("background-color", "#4CAF50");
+  playButton.style("color", "white");
   playButton.mousePressed(startAudio); // 绑定点击事件
 
   fft = new p5.FFT(0.8, 64);
@@ -127,9 +140,13 @@ function recursiveBranch(len, weight, angle, leafAlpha, depth) {
 // 用户点击按钮后开始音频
 function startAudio() {
   userStartAudio(); // 解锁音频播放
-  if (!song.isPlaying()) {
+  if (song.isLoaded() && !song.isPlaying()) {
     song.loop();
+    console.log("🎶 开始播放音乐 🎶");
+  } else {
+    console.log("⚠️ 音频未正确加载");
   }
   audioStarted = true;
   playButton.hide(); // 隐藏按钮
 }
+
